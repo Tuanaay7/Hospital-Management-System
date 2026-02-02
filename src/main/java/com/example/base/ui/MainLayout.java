@@ -1,55 +1,51 @@
 package com.example.base.ui;
 
-import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
+import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.icon.Icon;
-import com.vaadin.flow.component.icon.VaadinIcon;
-import com.vaadin.flow.component.orderedlayout.FlexComponent;
-import com.vaadin.flow.component.orderedlayout.Scroller;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.sidenav.SideNav;
-import com.vaadin.flow.component.sidenav.SideNavItem;
-import com.vaadin.flow.dom.Style;
-import com.vaadin.flow.router.Layout;
-import com.vaadin.flow.server.menu.MenuConfiguration;
-import com.vaadin.flow.server.menu.MenuEntry;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 
-@Layout
-public final class MainLayout extends AppLayout {
+public class MainLayout extends AppLayout {
 
-    MainLayout() {
-        setPrimarySection(Section.DRAWER);
-        addToDrawer(createHeader(), new Scroller(createSideNav()));
-    }
+    public MainLayout() {
 
-    private Component createHeader() {
-        // TODO Replace with real application logo and name
-        var appLogo = VaadinIcon.CUBES.create();
-        appLogo.setSize("48px");
-        appLogo.setColor("green");
+        /* =======================
+           TITLE
+        ======================== */
+        H2 title = new H2("HospitalApp");
+        title.getStyle()
+                .set("margin", "0")
+                .set("font-size", "20px")
+                .set("font-weight", "600")
+                .set("color", "#1e3a5f");
 
-        var appName = new Span("My Application");
-        appName.getStyle().setFontWeight(Style.FontWeight.BOLD);
+        /* =======================
+           SUBTITLE (OPTIONAL)
+        ======================== */
+        Span subtitle = new Span("Hastane Yönetim Sistemi");
+        subtitle.getStyle()
+                .set("font-size", "12px")
+                .set("color", "#5b6f91");
 
-        var header = new VerticalLayout(appLogo, appName);
-        header.setAlignItems(FlexComponent.Alignment.CENTER);
-        return header;
-    }
+        /* =======================
+           BRAND AREA
+        ======================== */
+        com.vaadin.flow.component.orderedlayout.VerticalLayout brand =
+                new com.vaadin.flow.component.orderedlayout.VerticalLayout(title, subtitle);
 
-    private SideNav createSideNav() {
-        var nav = new SideNav();
-        nav.addClassNames(LumoUtility.Margin.Horizontal.MEDIUM);
-        MenuConfiguration.getMenuEntries().forEach(entry -> nav.addItem(createSideNavItem(entry)));
-        return nav;
-    }
+        brand.setSpacing(false);
+        brand.setPadding(false);
+        brand.getStyle()
+                .set("padding", "8px 16px");
 
-    private SideNavItem createSideNavItem(MenuEntry menuEntry) {
-        if (menuEntry.icon() != null) {
-            return new SideNavItem(menuEntry.title(), menuEntry.path(), new Icon(menuEntry.icon()));
-        } else {
-            return new SideNavItem(menuEntry.title(), menuEntry.path());
-        }
+        addToNavbar(brand);
+
+        setPrimarySection(Section.NAVBAR);
+
+        /* =======================
+           NAVBAR STYLE
+        ======================== */
+        getElement().getStyle()
+                .set("background", "rgba(83, 74, 110, 0.79)")
+                .set("box-shadow", "0 2px 10px rgba(0,0,0,0.06)");
     }
 }
