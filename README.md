@@ -38,32 +38,39 @@ assigning patients to responsible personnel.
 
 ## 🗂️ Project Structure
 
+```text
 src
-└── main/java/com/example
-├── domain
-│ ├── hasta
-│ │ ├── Hasta.java
-│ │ ├── HastaRepository.java
-│ │ └── HastaService.java
-│ └── personel
-│ ├── Personel.java
-│ ├── PersonelRepository.java
-│ └── PersonelService.java
-├── dto
-│ ├── HastaDTO.java
-│ └── PersonelDTO.java
-├── ui
-│ ├── HomeView.java
-│ ├── HastaView.java
-│ ├── HastaPanelView.java
-│ ├── PersonelView.java
-│ ├── PersonelPanelView.java
-│ ├── AdminHomeView.java
-│ └── AdminLoginView.java
-├── ui/components
-│ └── NavigationCard.java
-└── util
-└── TcKimlikValidator.java
+└── main
+    └── java
+        └── com
+            └── example
+                ├── domain
+                │   ├── hasta
+                │   │   ├── Hasta.java
+                │   │   ├── HastaRepository.java
+                │   │   └── HastaService.java
+                │   └── personel
+                │       ├── Personel.java
+                │       ├── PersonelRepository.java
+                │       └── PersonelService.java
+                ├── dto
+                │   ├── HastaDTO.java
+                │   └── PersonelDTO.java
+                ├── ui
+                │   ├── HomeView.java
+                │   ├── HastaView.java
+                │   ├── HastaPanelView.java
+                │   ├── PersonelView.java
+                │   ├── PersonelPanelView.java
+                │   ├── AdminHomeView.java
+                │   └── AdminLoginView.java
+                │   └── components
+                │       └── NavigationCard.java
+                └── util
+                    └── TcKimlikValidator.java
+```
+
+
 ---
 
 ## ▶️ Running the Application (Development Mode)
@@ -88,3 +95,5 @@ Tuana Ay
 
 
 ---
+> **Note:** DTO classes are included for future REST API or external client integrations.  
+> Currently, the Vaadin UI layer works directly with JPA entities.
