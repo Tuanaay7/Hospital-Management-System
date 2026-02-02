@@ -97,3 +97,7 @@ Tuana Ay
 ---
 > **Note:** DTO classes are included for future REST API or external client integrations.  
 > Currently, the Vaadin UI layer works directly with JPA entities.
+
+⚠️ Database credentials are not included in this repository for security reasons.  
+Please create a local `application.properties` file based on `application-example.properties`.
+
