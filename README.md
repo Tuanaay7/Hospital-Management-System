@@ -1,80 +1,90 @@
-# My Application README
+# Hospital Management System
 
-- [ ] TODO Replace or update this README with instructions relevant to your application
+This project is a **Hospital Management System** developed as part of a **software internship**.
+The application is built using **Java, Spring Boot, Vaadin**, and **Oracle Database**.
 
-## Project Structure
+The system provides a web-based interface for managing **patients** and **personnel**, and for
+assigning patients to responsible personnel.
 
-This project has the following structure:
+---
 
-```
+## 🚀 Technologies Used
+
+- Java 21  
+- Spring Boot 3  
+- Spring Data JPA  
+- Vaadin 24  
+- Oracle Database  
+- Maven  
+
+---
+
+## 📌 Features
+
+### 👨‍⚕️ Admin Panel
+- Add, list and delete personnel  
+- Add, list and delete patients  
+- Assign patients to personnel  
+
+### 🧍 Patient Panel
+- Query patient information using **TC Identity Number**
+- View assigned personnel information  
+
+### 🧑‍💼 Personnel Panel
+- Query personnel information using **TC Identity Number**
+- View assigned patients  
+
+---
+
+## 🗂️ Project Structure
+
 src
-├── main/java
-│   └── [application package]
-│       ├── base
-│       │   └── ui
-│       │       ├── ViewToolbar.java
-│       │       └── MainLayout.java
-│       ├── examplefeature
-│       │   ├── ui
-│       │   │   └── TaskListView.java
-│       │   ├── Task.java
-│       │   ├── TaskRepository.java
-│       │   └── TaskService.java                
-│       └── Application.java     
-├── main/resources
-│   ├── META-INF
-│   │   └── resources
-│   │       └── styles.css
-│   └── application.properties 
-└── test/java
-    └── [application package]
-        └── examplefeature
-           └── TaskServiceTest.java                 
-```
+└── main/java/com/example
+├── domain
+│ ├── hasta
+│ │ ├── Hasta.java
+│ │ ├── HastaRepository.java
+│ │ └── HastaService.java
+│ └── personel
+│ ├── Personel.java
+│ ├── PersonelRepository.java
+│ └── PersonelService.java
+├── dto
+│ ├── HastaDTO.java
+│ └── PersonelDTO.java
+├── ui
+│ ├── HomeView.java
+│ ├── HastaView.java
+│ ├── HastaPanelView.java
+│ ├── PersonelView.java
+│ ├── PersonelPanelView.java
+│ ├── AdminHomeView.java
+│ └── AdminLoginView.java
+├── ui/components
+│ └── NavigationCard.java
+└── util
+└── TcKimlikValidator.java
+---
 
-The main entry point into the application is `Application.java`. This class contains the `main()` method that starts up 
-the Spring Boot application.
+## ▶️ Running the Application (Development Mode)
 
-The project follows a *feature-based package structure*, organizing code by *functional units* rather than traditional 
-architectural layers. It includes two feature packages: `base` and `examplefeature`.
+1️⃣ Configure the database connection in `application.properties`.
 
-* The `base` package contains classes meant for reuse across different features, either through composition or 
-  inheritance. You can use them as-is, tweak them to your needs, or remove them.
-* The `examplefeature` package is an example feature package that demonstrates the structure. It represents a 
-  *self-contained unit of functionality*, including UI components, business logic, data access, and an integration test.
-  Once you create your own features, *you'll remove this package*.
-
-
-## Starting in Development Mode
-
-To start the application in development mode, import it into your IDE and run the `Application` class. 
-You can also start the application from the command line by running: 
+2️⃣ Start the application using Maven Wrapper:
 
 ```bash
-./mvnw
-```
+./mvnw spring-boot:run
 
-## Building for Production
+3️⃣ Open the application in your browser:
+http://localhost:8080
 
-To build the application in production mode, run:
+🏗️ Building the Application
 
-```bash
+To build the project:
 ./mvnw package
-```
 
-To build a Docker image, run:
+👩‍💻 Author
+Tuana Ay
 
-```bash
-docker build -t my-application:latest .
-```
 
-If you use commercial components, pass the license key as a build secret:
-
-```bash
-docker build --secret id=proKey,src=$HOME/.vaadin/proKey .
-```
-
-## Next Steps
-
-The [Building Apps](https://vaadin.com/docs/v25/building-apps) guides contain hands-on advice for adding features to 
-your application.
+---
