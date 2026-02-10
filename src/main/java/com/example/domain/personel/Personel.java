@@ -4,19 +4,18 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "PERSONELTUANA", schema = "STAJDEMO")
+@SequenceGenerator(
+        name = "personel_seq_gen",
+        sequenceName = "PERSONEL_SEQ",
+        allocationSize = 1
+)
 public class Personel {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "personel_seq"
+            generator = "personel_seq_gen"
     )
-    @SequenceGenerator(
-        name = "personel_seq",
-        sequenceName = "PERSONEL_TUANA_SEQ",
-        allocationSize = 1
-    )
-    
     @Column(name = "ID")
     private Long id;
 
@@ -31,31 +30,14 @@ public class Personel {
 
     public Personel() {}
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
 
-    public String getAd() {
-        return ad;
-    }
+    public String getAd() { return ad; }
+    public void setAd(String ad) { this.ad = ad; }
 
-    public void setAd(String ad) {
-        this.ad = ad;
-    }
+    public String getSoyad() { return soyad; }
+    public void setSoyad(String soyad) { this.soyad = soyad; }
 
-    public String getSoyad() {
-        return soyad;
-    }
-
-    public void setSoyad(String soyad) {
-        this.soyad = soyad;
-    }
-
-    public String getTcNo() {
-        return tcNo;
-    }
-
-    public void setTcNo(String tcNo) {
-        this.tcNo = tcNo;
-    }
+    public String getTcNo() { return tcNo; }
+    public void setTcNo(String tcNo) { this.tcNo = tcNo; }
 }
