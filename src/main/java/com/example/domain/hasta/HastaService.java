@@ -3,6 +3,7 @@ package com.example.domain.hasta;
 import com.example.domain.personel.Personel;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import com.example.exception.DuplicateTcException;
 
 import java.util.List;
 import java.util.Optional;
@@ -30,8 +31,14 @@ public class HastaService {
     }
 
     public Hasta save(Hasta hasta) {
+
+        if (repository.findByTcNo(hasta.getTcNo()).isPresent()) {
+            throw new DuplicateTcException("Bu TC zaten kayıtlı");
+        }
+
         return repository.save(hasta);
     }
+
 
     public void deleteById(Long id) {
         repository.deleteById(id);

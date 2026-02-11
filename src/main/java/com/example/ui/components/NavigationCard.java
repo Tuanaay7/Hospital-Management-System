@@ -13,6 +13,7 @@ public class NavigationCard extends VerticalLayout {
         setSpacing(false);
         setWidthFull();
         setMaxWidth("360px");
+        setMinHeight("140px");
 
         getStyle()
                 .set("border-radius", "18px")
@@ -32,29 +33,22 @@ public class NavigationCard extends VerticalLayout {
                 .set("margin-top", "8px")
                 .set("color", "#5b6f91");
 
-        Paragraph arrow = new Paragraph("");
-        arrow.getStyle()
-                .set("margin-top", "16px")
-                .set("font-size", "18px")
-                .set("font-weight", "600")
-                .set("color", "#3f87ff");
-
-        add(header, desc, arrow);
+        add(header, desc);
 
         // CLICK = NAVIGATE
         addClickListener(e ->
                 UI.getCurrent().navigate(route)
         );
 
-        // HOVER EFFECT
+        // HOVER EFFECT (Orijinal)
         addAttachListener(e ->
                 getElement().executeJs(
                         "this.addEventListener('mouseenter',()=>{" +
-                        "this.style.transform='translateY(-6px)';" +
-                        "this.style.boxShadow='0 18px 40px rgba(0,0,0,0.12)';});" +
+                                "this.style.transform='translateY(-6px)';" +
+                                "this.style.boxShadow='0 18px 40px rgba(0,0,0,0.12)';});" +
                         "this.addEventListener('mouseleave',()=>{" +
-                        "this.style.transform='translateY(0)';" +
-                        "this.style.boxShadow='0 10px 25px rgba(0,0,0,0.08)';});"
+                                "this.style.transform='translateY(0)';" +
+                                "this.style.boxShadow='0 10px 25px rgba(0,0,0,0.08)';});"
                 )
         );
     }

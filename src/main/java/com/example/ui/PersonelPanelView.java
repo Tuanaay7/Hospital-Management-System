@@ -9,9 +9,11 @@ import com.example.util.TcKimlikValidator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.grid.GridVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -48,18 +50,13 @@ public class PersonelPanelView extends VerticalLayout {
                 .set("box-shadow", "0 18px 40px rgba(0,0,0,0.12)");
 
         H2 title = new H2("Personel Bilgi Paneli");
-        title.getStyle()
-                .set("margin", "0")
-                .set("color", "#1e3a5f");
+        title.getStyle().set("margin", "0").set("color", "#1e3a5f");
 
         Paragraph subtitle = new Paragraph(
                 "TC Kimlik Numaranızı girerek sorumlu olduğunuz hastaları görüntüleyebilirsiniz"
         );
-        subtitle.getStyle()
-                .set("margin-top", "4px")
-                .set("color", "#5b6f91");
+        subtitle.getStyle().set("margin-top", "4px").set("color", "#5b6f91");
 
-  
         TextField tcField = new TextField("TC Kimlik No");
         tcField.setWidthFull();
         tcField.setMaxLength(11);
@@ -68,11 +65,9 @@ public class PersonelPanelView extends VerticalLayout {
         sorgulaBtn.setWidthFull();
         sorgulaBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-
         VerticalLayout resultLayout = new VerticalLayout();
         resultLayout.setSpacing(true);
         resultLayout.setPadding(true);
-
         resultLayout.getStyle()
                 .set("margin-top", "16px")
                 .set("border-radius", "14px")
@@ -80,6 +75,7 @@ public class PersonelPanelView extends VerticalLayout {
 
         Grid<Hasta> hastaGrid = new Grid<>(Hasta.class, false);
         hastaGrid.setWidthFull();
+        hastaGrid.addThemeVariants(GridVariant.LUMO_ROW_STRIPES);
 
         hastaGrid.addColumn(Hasta::getAd).setHeader("Ad");
         hastaGrid.addColumn(Hasta::getSoyad).setHeader("Soyad");
@@ -89,25 +85,22 @@ public class PersonelPanelView extends VerticalLayout {
 
             resultLayout.removeAll();
 
-            String tc = tcField.getValue();
+            String tc = tcField.getValue().trim();
+
+            if (tc.isEmpty()) {
+                showError("TC Kimlik Numarası giriniz");
+                return;
+            }
 
             if (!TcKimlikValidator.isValid(tc)) {
-                Notification.show(
-                        "Geçersiz TC Kimlik Numarası",
-                        3000,
-                        Notification.Position.TOP_CENTER
-                );
+                showError("Geçersiz TC Kimlik Numarası");
                 return;
             }
 
             Optional<Personel> personelOpt = personelService.findByTcNo(tc);
 
             if (personelOpt.isEmpty()) {
-                Notification.show(
-                        "Personel kaydı bulunamadı",
-                        3000,
-                        Notification.Position.TOP_CENTER
-                );
+                showInfo("Personel kaydı bulunamadı");
                 return;
             }
 
@@ -135,14 +128,18 @@ public class PersonelPanelView extends VerticalLayout {
             }
         });
 
-        card.add(
-                title,
-                subtitle,
-                tcField,
-                sorgulaBtn,
-                resultLayout
-        );
-
+        card.add(title, subtitle, tcField, sorgulaBtn, resultLayout);
         add(card);
+    }
+
+    private void showError(String message) {
+        Notification notification = Notification.show(message);
+        notification.setPosition(Notification.Position.TOP_CENTER);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
+
+    private void showInfo(String message) {
+        Notification notification = Notification.show(message);
+        notification.setPosition(Notification.Position.TOP_CENTER);
     }
 }

@@ -3,6 +3,8 @@ package com.example.ui;
 import com.example.base.ui.MainLayout;
 import com.example.domain.personel.Personel;
 import com.example.domain.personel.PersonelService;
+import com.example.exception.DuplicateTcException;
+import com.example.exception.PersonelHasHastaException;
 import com.example.util.TcKimlikValidator;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
@@ -20,7 +22,6 @@ public class PersonelView extends VerticalLayout {
 
     public PersonelView(PersonelService personelService) {
 
-        /* ROOT */
         setSizeFull();
         setPadding(true);
         setSpacing(true);
@@ -31,11 +32,9 @@ public class PersonelView extends VerticalLayout {
                 "linear-gradient(180deg, #eef4ff, #e2ebff)"
         );
 
-        /* TITLE */
         H2 title = new H2("Personel Yönetimi");
         title.getStyle().set("color", "#1e3a5f");
 
-        /* FORM */
         FormLayout form = new FormLayout();
         form.setMaxWidth("700px");
 
@@ -53,7 +52,6 @@ public class PersonelView extends VerticalLayout {
         Button ekle = new Button("Personel Ekle");
         ekle.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        /* GRID */
         Grid<Personel> grid = new Grid<>(Personel.class, false);
         grid.setWidthFull();
         grid.setHeight("380px");
@@ -64,7 +62,6 @@ public class PersonelView extends VerticalLayout {
 
         grid.setItems(personelService.findAll());
 
-        /* DELETE */
         Button sil = new Button("Seçili Personeli Sil");
         sil.addThemeVariants(ButtonVariant.LUMO_ERROR);
         sil.setEnabled(false);
@@ -73,7 +70,6 @@ public class PersonelView extends VerticalLayout {
                 sil.setEnabled(e.getValue() != null)
         );
 
-        /* ACTIONS */
         ekle.addClickListener(e -> {
 
             String tcVal = tc.getValue().trim();
@@ -88,30 +84,39 @@ public class PersonelView extends VerticalLayout {
                 return;
             }
 
-            if (personelService.findByTcNo(tcVal).isPresent()) {
-                Notification.show("Bu TC zaten kayıtlı");
-                return;
+            try {
+
+                Personel p = new Personel();
+                p.setAd(ad.getValue());
+                p.setSoyad(soyad.getValue());
+                p.setTcNo(tcVal);
+
+                personelService.save(p);
+                grid.setItems(personelService.findAll());
+
+                ad.clear();
+                soyad.clear();
+                tc.clear();
+
+            } catch (DuplicateTcException ex) {
+                Notification.show(ex.getMessage());
             }
-
-            Personel p = new Personel();
-            p.setAd(ad.getValue());
-            p.setSoyad(soyad.getValue());
-            p.setTcNo(tcVal);
-
-            personelService.save(p);
-            grid.setItems(personelService.findAll());
-
-            ad.clear();
-            soyad.clear();
-            tc.clear();
         });
 
         sil.addClickListener(e -> {
+
             Personel selected = grid.asSingleSelect().getValue();
+
             if (selected != null) {
-                personelService.deleteById(selected.getId());
-                grid.setItems(personelService.findAll());
-                sil.setEnabled(false);
+                try {
+
+                    personelService.deleteById(selected.getId());
+                    grid.setItems(personelService.findAll());
+                    sil.setEnabled(false);
+
+                } catch (PersonelHasHastaException ex) {
+                    Notification.show(ex.getMessage());
+                }
             }
         });
 

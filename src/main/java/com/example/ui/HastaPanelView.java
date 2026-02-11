@@ -9,6 +9,7 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H2;
 import com.vaadin.flow.component.html.Paragraph;
 import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
@@ -20,7 +21,6 @@ public class HastaPanelView extends VerticalLayout {
 
     public HastaPanelView(HastaService hastaService) {
 
-        /* ROOT */
         setSizeFull();
         setPadding(false);
         setSpacing(false);
@@ -30,8 +30,6 @@ public class HastaPanelView extends VerticalLayout {
                 "linear-gradient(180deg, #eef4ff, #e2ebff)"
         );
 
-
-        /* CARD */
         VerticalLayout card = new VerticalLayout();
         card.setWidth("420px");
         card.setPadding(true);
@@ -43,20 +41,14 @@ public class HastaPanelView extends VerticalLayout {
                 .set("background", "rgba(255,255,255,0.95)")
                 .set("box-shadow", "0 18px 40px rgba(0,0,0,0.12)");
 
-        /* HEADER */
         H2 title = new H2("Hasta Bilgi Sorgulama");
-        title.getStyle()
-                .set("margin", "0")
-                .set("color", "#1e3a5f");
+        title.getStyle().set("margin", "0").set("color", "#1e3a5f");
 
         Paragraph subtitle = new Paragraph(
                 "TC Kimlik Numaranızı girerek kayıtlı bilgilerinizi görüntüleyebilirsiniz"
         );
-        subtitle.getStyle()
-                .set("margin-top", "4px")
-                .set("color", "#5b6f91");
+        subtitle.getStyle().set("margin-top", "4px").set("color", "#5b6f91");
 
-        /* FORM */
         TextField tcField = new TextField("TC Kimlik No");
         tcField.setWidthFull();
         tcField.setMaxLength(11);
@@ -65,11 +57,9 @@ public class HastaPanelView extends VerticalLayout {
         sorgulaBtn.setWidthFull();
         sorgulaBtn.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
 
-        /* RESULT */
         VerticalLayout resultLayout = new VerticalLayout();
         resultLayout.setPadding(true);
         resultLayout.setSpacing(false);
-
         resultLayout.getStyle()
                 .set("margin-top", "16px")
                 .set("border-radius", "14px")
@@ -79,25 +69,22 @@ public class HastaPanelView extends VerticalLayout {
 
             resultLayout.removeAll();
 
-            String tc = tcField.getValue();
+            String tc = tcField.getValue().trim();
+
+            if (tc.isEmpty()) {
+                showError("TC Kimlik Numarası giriniz");
+                return;
+            }
 
             if (!TcKimlikValidator.isValid(tc)) {
-                Notification.show(
-                        "Geçersiz TC Kimlik Numarası",
-                        3000,
-                        Notification.Position.TOP_CENTER
-                );
+                showError("Geçersiz TC Kimlik Numarası");
                 return;
             }
 
             Optional<Hasta> hastaOpt = hastaService.findByTc(tc);
 
             if (hastaOpt.isEmpty()) {
-                Notification.show(
-                        "Hasta kaydı bulunamadı",
-                        3000,
-                        Notification.Position.TOP_CENTER
-                );
+                showInfo("Hasta kaydı bulunamadı");
                 return;
             }
 
@@ -119,5 +106,16 @@ public class HastaPanelView extends VerticalLayout {
 
         card.add(title, subtitle, tcField, sorgulaBtn, resultLayout);
         add(card);
+    }
+
+    private void showError(String message) {
+        Notification notification = Notification.show(message);
+        notification.setPosition(Notification.Position.TOP_CENTER);
+        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+    }
+
+    private void showInfo(String message) {
+        Notification notification = Notification.show(message);
+        notification.setPosition(Notification.Position.TOP_CENTER);
     }
 }
